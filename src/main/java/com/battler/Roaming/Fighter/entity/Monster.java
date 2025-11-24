@@ -34,5 +34,9 @@ public class Monster {
 
     @Column(nullable = false)
     @Min(0)
+    private Integer maxHealth;
+
+    @Column(nullable = false)
+    @Min(0)
     private Integer health;
 }
