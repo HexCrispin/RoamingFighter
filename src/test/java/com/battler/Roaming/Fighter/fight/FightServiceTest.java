@@ -33,7 +33,6 @@ class FightServiceTest {
 
     private static final FixtureMonkey FIXTURE_MONKEY = TestFixtures.FIXTURE_MONKEY;
 
-    // ========== createFight Tests ==========
 
     @Test
     void createFight_WithValidRequest_ShouldCreateFight() {
@@ -197,8 +196,6 @@ class FightServiceTest {
         verify(fightRepository, never()).save(any(Fight.class));
     }
 
-    // ========== executeExchange Tests ==========
-
     @Test
     void executeExchange_WithValidOngoingFight_ShouldExecuteCombat() {
         // Given
@@ -327,8 +324,6 @@ class FightServiceTest {
     @Test
     void executeExchange_ShouldCalculateDamageCorrectly() {
         // Given
-        // Monster A: 10 attack, 5 defence -> deals 5 damage to B (10-5)
-        // Monster B: 8 attack, 4 defence -> deals 4 damage to A (8-4)
         Monster monsterA = createMonsterWithHealth(100, 10, 5);
         Monster monsterB = createMonsterWithHealth(90, 8, 4);
 
@@ -342,17 +337,12 @@ class FightServiceTest {
         fightService.executeExchange(fight.getId());
 
         // Then
-        // Verify monsters were saved with updated health
         verify(monsterRepository, times(2)).save(any(Monster.class));
-        // Monster B should have taken damage (90 - 5 = 85)
-        // Monster A should have taken damage (100 - 4 = 96)
     }
 
     @Test
     void executeExchange_WithMinimumDamage_ShouldDealAtLeastOneDamage() {
         // Given
-        // Monster A: 5 attack, 10 defence -> deals 1 damage (minimum)
-        // Monster B: 10 attack, 10 defence -> deals 1 damage (minimum)
         Monster monsterA = createMonsterWithHealth(100, 5, 10);
         Monster monsterB = createMonsterWithHealth(100, 10, 10);
 
@@ -369,8 +359,6 @@ class FightServiceTest {
         // Both monsters should take at least 1 damage
         verify(monsterRepository, times(2)).save(any(Monster.class));
     }
-
-    // ========== getFightState Tests ==========
 
     @Test
     void getFightState_WithValidFight_ShouldReturnState() {
@@ -405,8 +393,6 @@ class FightServiceTest {
                 () -> fightService.getFightState(nonExistentFightId));
         assertTrue(exception.getMessage().contains("Fight not found with id:"));
     }
-
-    // ========== Helper Methods ==========
 
     private Monster createMonsterWithHealth(int health, int attack, int defence) {
         return FIXTURE_MONKEY.giveMeBuilder(Monster.class)
